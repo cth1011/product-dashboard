@@ -1,0 +1,47 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      '@repo/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config
+      '@repo/tailwind-config':
+        specifier: workspace:*
+        version: link:../../packages/tailwind-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
+
+  ../..: {}
+
+  ../../../ggcn: {}
+
+  ../../../sellerx: {}
+
+  ../../../sellerx/apps/item-module: {}
+
+  ../../../sellerx/apps/main-dashboard: {}
+
+  ../../../sellerx/packages/ui: {}
+
+  ../../../the-carpenter: {}
+
+  ../../../worldbank-eda: {}
+
+  ../../packages/eslint-config: {}
+
+  ../../packages/tailwind-config: {}
+
+  ../../packages/typescript-config: {}
+
+  ../../packages/ui: {}
