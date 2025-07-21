@@ -1,29 +1,46 @@
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
-import { Button } from '@repo/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@repo/ui/form';
-import { Input } from '@repo/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/card';
-import { useProductStore } from '../store/productStore';
+import { Button } from "@repo/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@repo/ui/form";
+import { Input } from "@repo/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/select";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { useProductStore } from "../store/productStore";
 
 const formSchema = z.object({
-  title: z.string().min(2, { message: 'Title must be at least 2 characters.' }),
-  sku: z.string().min(3, { message: 'SKU must be at least 3 characters.' }),
-  price: z.coerce.number().nonnegative({ message: 'Price must be a non-negative number.' }),
-  status: z.enum(['Active', 'Inactive']),
+  title: z.string().min(2, { message: "Title must be at least 2 characters." }),
+  sku: z.string().min(3, { message: "SKU must be at least 3 characters." }),
+  price: z.coerce
+    .number()
+    .positive({ message: "Price must be a non-negative number." }),
+  status: z.enum(["Active", "Inactive"]),
 });
 
 const ItemForm = () => {
   const addItem = useProductStore((state) => state.addItem);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '',
-      sku: '',
+      title: "",
+      sku: "",
       price: 1,
-      status: 'Active',
+      status: "Active",
     },
   });
 
@@ -41,7 +58,7 @@ const ItemForm = () => {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
                 name="title"
@@ -75,7 +92,20 @@ const ItemForm = () => {
                   <FormItem>
                     <FormLabel>Price</FormLabel>
                     <FormControl>
-                      <Input type="number" step="1" {...field} />
+                      <Input
+                        type="number"
+                        step="1"
+                        name={field.name}
+                        onBlur={field.onBlur}
+                        ref={field.ref}
+                        onChange={(e) => field.onChange(e.target.value)}
+                        value={
+                          typeof field.value === "string" ||
+                          typeof field.value === "number"
+                            ? field.value
+                            : ""
+                        }
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -87,7 +117,10 @@ const ItemForm = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Status</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a status" />
