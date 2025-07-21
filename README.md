@@ -1,32 +1,65 @@
-# `Turborepo` Vite starter
+# Microfrontend Product Dashboard
 
-This is a community-maintained example. If you experience a problem, please submit a pull request with a fix. GitHub Issues will be closed.
+This project is a monorepo containing a microfrontend-based product dashboard, built using React and Vite. It demonstrates a host application (`main-dashboard`) loading a remote microfrontend (`item-module`) dynamically.
 
-## Using this example
+## Project Structure
 
-Run the following command:
+This monorepo is managed with pnpm and TurboRepo, providing an efficient way to manage dependencies and build processes across multiple applications and packages.
 
-```sh
-npx create-turbo@latest -e with-vite-react
+- `apps/main-dashboard`: The host application that loads the `item-module` and displays aggregated metrics.
+- `apps/item-module`: The remote microfrontend that provides product creation and listing functionalities.
+- `packages/ui`: A shared UI component library used across the applications.
+- `packages/eslint-config`: Shared ESLint configuration.
+- `packages/tailwind-config`: Shared Tailwind CSS configuration.
+- `packages/typescript-config`: Shared TypeScript configurations.
+
+## Getting Started
+
+To set up and run the project locally, follow these steps:
+
+### 1. Install pnpm
+
+If you don't have pnpm installed, you can install it globally:
+
+```bash
+npm install -g pnpm
 ```
 
-## What's inside?
+### 2. Install Dependencies
 
-This Turborepo includes the following packages and apps:
+Navigate to the root of the monorepo and install all dependencies:
 
-### Apps and Packages
+```bash
+pnpm install
+```
 
-- `web`: react [vite](https://vitejs.dev) ts app
-- `@repo/ui`: a stub component library shared by `web` application
-- `@repo/eslint-config`: shared `eslint` configurations
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### 3. Run the Applications
 
-Each package and app is 100% [TypeScript](https://www.typescriptlang.org/).
+To run both the `main-dashboard` (host) and `item-module` (remote) applications concurrently in development mode:
 
-### Utilities
+```bash
+pnpm run dev
+```
 
-This Turborepo has some additional tools already setup for you:
+- The `main-dashboard` will typically run on `http://localhost:5000`.
+- The `item-module` will typically run on `http://localhost:5001`.
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+Ensure both servers are running for the `main-dashboard` to correctly load the `item-module`.
+
+### 4. Build the Applications
+
+To build both applications for production:
+
+```bash
+pnpm run build
+```
+
+## Technical Decisions
+
+- **Monorepo Management:** pnpm and TurboRepo are used for efficient dependency management, caching, and parallel task execution.
+- **Code Formatting:** Prettier is configured as a shared package (`packages/prettier-config`) to enforce consistent code style across the entire monorepo.
+- **Microfrontend Integration:** Module Federation (via `@module-federation/vite`) is used for dynamic loading and sharing of modules between the host and remote applications.
+- **State Sharing:** Zustand is utilized for state management within the `item-module`, and its store is exposed and consumed by the `main-dashboard` to provide real-time metric updates.
+- **UI Components:** `shadcn/ui` components are integrated through a shared `@repo/ui` package, ensuring consistent styling and functionality.
+- **Styling:** Tailwind CSS v4 is used for utility-first styling across the entire project.
+- **Error Handling:** React `Suspense` and `react-error-boundary` are implemented to provide graceful loading and error handling for the remote microfrontend, ensuring a robust user experience even if the remote module fails to load.
