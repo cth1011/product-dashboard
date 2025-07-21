@@ -1,0 +1,24 @@
+.eslintrc.js
+.vscode/settings.json
+.__mf__temp/
+components.json
+eslint.config.js
+package.json
+
+**/*.md
+
+# .prettierignore
+
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+.next
+.turbo
+coverage
+
+# Lock files
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
