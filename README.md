@@ -57,7 +57,7 @@ pnpm run build
 ## Technical Decisions
 
 - **Monorepo Management:** pnpm and TurboRepo are used for efficient dependency management, caching, and parallel task execution.
-- **Code Formatting:** Prettier is configured as a shared package (`packages/prettier-config`) to enforce consistent code style across the entire monorepo.
+- **Code Formatting:** Prettier is configured to enforce consistent code style across the entire monorepo.
 - **Microfrontend Integration:** Module Federation (via `@module-federation/vite`) is used for dynamic loading and sharing of modules between the host and remote applications.
 - **State Sharing:** Zustand is utilized for state management within the `item-module`, and its store is exposed and consumed by the `main-dashboard` to provide real-time metric updates.
 - **UI Components:** `shadcn/ui` components are integrated through a shared `@repo/ui` package, ensuring consistent styling and functionality.
